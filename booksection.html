@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        header {
+            background-color: #1abc9c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .book {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .book:hover {
+            transform: scale(1.02);
+        }
+        .book img {
+            width: 150px;
+            height: 200px;
+            border-radius: 10px;
+            margin-right: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .book-content {
+            flex-grow: 1;
+        }
+        .book-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1abc9c;
+        }
+        .book-description {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .buttons a {
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: white;
+            background-color: #3498db;
+            transition: background-color 0.3s ease;
+        }
+        .buttons a:hover {
+            background-color: #1abc9c;
+        }
+        .buttons a.download {
+            background-color: #e74c3c;
+        }
+        .buttons a.download:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <header>Book Library</header>
+    <div class="container">
+        <!-- Book 1 -->
+        <div class="book">
+            <img src="sql.png" alt="Book 1">
+            <div class="book-content">
+                <h2 class="book-title">SQL </h2>
+                <p class="book-description">A comprehensive guide to mastering programming concepts and best practices.</p>
+                <div class="buttons">
+                    <a href="SQL-Manual.pdf" class="read">Read</a>
+                    <a href="SQL-Manual.pdf" class="download" download>Download</a>
+                </div>
+            </div>
+        </div>
+        <!-- Book 2 -->
+        <div class="book">
+            <img src="a8.webp" alt="Book 2">
+            <div class="book-content">
+                <h2 class="book-title">Data Structures and Algorithms</h2>
+                <p class="book-description">An in-depth exploration of essential data structures and algorithms for developers.</p>
+                <div class="buttons">
+                    <a href="Data Structures & Algorithms - Quick Guide.pdf" class="read">Read</a>
+                    <a href="Data Structures & Algorithms - Quick Guide.pdf" class="download" download>Download</a>
+                </div>
+            </div>
+        </div>
+        <!-- Book 3 -->
+
+        <div class="book">
+            <img src="a9.jpg" alt="Book 3">
+            <div class="book-content">
+                <h2 class="book-title">Introduction to Data Analyst with Python </h2>
+                <p class="book-description">A data analyst is a professional who collects, analyzes, and interprets data to help organizations make data-driven decisions.</p>
+                <div class="buttons">
+                    <a href="Python-for-Data-Analysis.pdf" class="read">Read</a>
+                    <a href="Python-for-Data-Analysis.pdf" class="download" download>Download</a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="book">
+            <img src="book3.jpg" alt="Book 3">
+            <div class="book-content">
+                <h2 class="book-title">Introduction to Java</h2>
+                <p class="book-description">Learn the fundamentals of Java programming with real-world examples and exercises.</p>
+                <div class="buttons">
+                    <a href="book3-read.html" class="read">Read</a>
+                    <a href="book3.pdf" class="download" download>Download</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="book">
+            <img src="book3.jpg" alt="Book 3">
+            <div class="book-content">
+                <h2 class="book-title">Introduction to Java</h2>
+                <p class="book-description">Learn the fundamentals of Java programming with real-world examples and exercises.</p>
+                <div class="buttons">
+                    <a href="book3-read.html" class="read">Read</a>
+                    <a href="book3.pdf" class="download" download>Download</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="book">
+            <img src="book3.jpg" alt="Book 3">
+            <div class="book-content">
+                <h2 class="book-title">Introduction to Java</h2>
+                <p class="book-description">Learn the fundamentals of Java programming with real-world examples and exercises.</p>
+                <div class="buttons">
+                    <a href="book3-read.html" class="read">Read</a>
+                    <a href="book3.pdf" class="download" download>Download</a>
+                </div>
+            </div>
+        </div> -->
+
+
+
+        <!-- Add more books here -->
+    </div>
+</body>
+</html>

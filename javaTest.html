@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Java Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+            flex-direction: column;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 20px;
+        }
+        #progress {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        #question-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+        }
+        #question-index a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+        #question-index a:hover {
+            text-decoration: underline;
+        }
+        .question {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 10px;
+        }
+        .options {
+            margin: 15px 0;
+            text-align: left;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+        }
+        #timer {
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .result {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        #submit-test-button {
+            background-color: #d9534f;
+        }
+        #submit-test-button:hover {
+            background-color: #c9302c;
+        }
+        #results {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+        #results h3 {
+            margin-bottom: 15px;
+        }
+        .animation {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="progress">Solved: 0 | Unsolved: 3</div>
+        <div id="question-index">
+            <!-- Question index navigation -->
+        </div>
+        <h1>Mock Java Test</h1>
+        <div id="timer">Time Remaining: 30:00</div>
+        <div id="question-container">
+            <!-- Question and Options will be dynamically inserted here -->
+        </div>
+        <div id="navigation-buttons">
+            <button id="previous-button" onclick="previousQuestion()">Previous</button>
+            <button id="next-button" onclick="nextQuestion()">Next</button>
+            <button id="submit-button" onclick="submitAnswer()">Submit Answer</button>
+            <button id="submit-test-button" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <div id="results">
+        <h3>Test Results</h3>
+        <p><strong>Total Questions:</strong> <span id="totalQuestions">20</span></p>
+        <p><strong>Solved:</strong> <span id="solvedCount">0</span></p>
+        <p><strong>Unsolved:</strong> <span id="unsolvedCount">0</span></p>
+        <div id="question-results">
+            <!-- Individual question results will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+
+        const questions = [
+    { id: 'q1', text: 'What is the default value of an `int` in Java?', options: ['0', '1', 'null', 'undefined'], correct: 0 },
+    { id: 'q2', text: 'Which of the following is not a Java primitive type?', options: ['int', 'double', 'string', 'char'], correct: 2 },
+    { id: 'q3', text: 'What does JVM stand for?', options: ['Java Variable Machine', 'Java Virtual Machine', 'Java Version Manager', 'Java Value Machine'], correct: 1 },
+    { id: 'q4', text: 'Which keyword is used to define a constant in Java?', options: ['const', 'static', 'final', 'immutable'], correct: 2 },
+    { id: 'q5', text: 'What is the output of `System.out.println(2 + 3 + "Java");`?', options: ['5Java', 'Java23', '23Java', 'Error'], correct: 0 },
+    { id: 'q6', text: 'Which package contains the `Scanner` class?', options: ['java.io', 'java.util', 'java.net', 'java.lang'], correct: 1 },
+    { id: 'q7', text: 'Which of these methods is used to start a thread in Java?', options: ['start()', 'run()', 'execute()', 'init()'], correct: 0 },
+    { id: 'q8', text: 'What is the size of a `char` in Java?', options: ['1 byte', '2 bytes', '4 bytes', 'Platform dependent'], correct: 1 },
+    { id: 'q9', text: 'What will happen if a `finally` block includes a `return` statement?', options: ['The method execution terminates immediately.', 'It overrides the previous return statement.', 'It causes a compile-time error.', 'It is ignored.'], correct: 1 },
+    { id: 'q10', text: 'Which of the following is true about inheritance in Java?', options: ['A class can inherit multiple classes.', 'A class can inherit from one class only.', 'A class cannot inherit interfaces.', 'A class must implement all methods from its parent class.'], correct: 1 },
+    { id: 'q11', text: 'Which of the following is used to serialize an object in Java?', options: ['Serializable', 'Externalizable', 'Both A and B', 'None of the above'], correct: 2 },
+    { id: 'q12', text: 'What is the purpose of the `volatile` keyword in Java?', options: ['To make a variable thread-safe.', 'To stop a thread.', 'To ensure visibility of changes to variables across threads.', 'To make variables immutable.'], correct: 2 },
+    { id: 'q13', text: 'Which Java feature prevents memory leaks?', options: ['Manual garbage collection', 'Automatic garbage collection', 'Dynamic binding', 'Static variables'], correct: 1 },
+    { id: 'q14', text: 'What is the time complexity of HashMap’s `get()` method in the average case?', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n^2)'], correct: 0 },
+    { id: 'q15', text: 'What happens when a `HashMap`\'s load factor is exceeded?', options: ['It throws an exception.', 'It resizes and rehashes.', 'It removes old entries.', 'It becomes read-only.'], correct: 1 },
+    { id: 'q16', text: 'Which of the following is not true about the `abstract` class?', options: ['It can have constructors.', 'It cannot have final methods.', 'It can have static methods.', 'It can have non-abstract methods.'], correct: 1 },
+    { id: 'q17', text: 'What does the `@FunctionalInterface` annotation do?', options: ['Allows multiple methods in an interface.', 'Ensures the interface has exactly one abstract method.', 'Makes the interface compatible with lambda expressions.', 'Prevents inheritance of the interface.'], correct: 1 },
+    { id: 'q18', text: 'What is the difference between `StringBuffer` and `StringBuilder`?', options: ['StringBuffer is faster.', 'StringBuffer is synchronized.', 'StringBuilder is immutable.', 'StringBuilder is thread-safe.'], correct: 1 },
+    { id: 'q19', text: 'What is the default priority of a thread in Java?', options: ['0', '5', '10', 'Undefined'], correct: 1 },
+    { id: 'q20', text: 'What is the key difference between `Comparable` and `Comparator`?', options: ['Comparable allows sorting on multiple fields.', 'Comparator is used for natural ordering.', 'Comparable compares objects of different types.', 'Comparator allows custom sorting logic.'], correct: 3 }
+];
+
+        let currentQuestionIndex = 0;
+        const totalQuestions = questions.length;
+        const formData = {};
+        let solvedCount = 0;
+
+        function updateProgress() {
+            const unsolvedCount = totalQuestions - solvedCount;
+            document.getElementById('progress').textContent = `Solved: ${solvedCount} | Unsolved: ${unsolvedCount}`;
+        }
+
+        function displayQuestion(index) {
+            const container = document.getElementById('question-container');
+            container.innerHTML = ''; // Clear previous content
+
+            const question = questions[index];
+
+            // Create Question Element
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.textContent = `${index + 1}. ${question.text}`;
+            container.appendChild(questionElement);
+
+            // Create Options
+            const optionsDiv = document.createElement('div');
+            optionsDiv.classList.add('options');
+
+            question.options.forEach((option, i) => {
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = question.id;
+                input.value = i;
+
+                if (formData[question.id] === i) {
+                    input.checked = true; // Retain previous selection
+                }
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(option));
+                optionsDiv.appendChild(label);
+            });
+
+            container.appendChild(optionsDiv);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function submitAnswer() {
+            const question = questions[currentQuestionIndex];
+            const selectedOption = document.querySelector(`input[name="${question.id}"]:checked`);
+
+            if (selectedOption) {
+                const userAnswer = parseInt(selectedOption.value);
+                if (!(question.id in formData)) solvedCount++;
+                formData[question.id] = userAnswer;
+
+                updateProgress();
+                alert('Answer submitted for this question.');
+            } else {
+                alert('Please select an answer before submitting.');
+            }
+        }
+
+        function generateQuestionIndex() {
+            const indexContainer = document.getElementById('question-index');
+            questions.forEach((_, i) => {
+                const link = document.createElement('a');
+                link.textContent = i + 1;
+                link.href = '#';
+                link.onclick = () => {
+                    currentQuestionIndex = i;
+                    displayQuestion(i);
+                };
+                indexContainer.appendChild(link);
+            });
+        }
+
+        function submitTest() {
+            let resultsHTML = '';
+            questions.forEach((question, i) => {
+                const selectedAnswer = formData[question.id];
+                const isCorrect = selectedAnswer === question.correct;
+                const resultClass = isCorrect ? 'correct' : 'wrong';
+                resultsHTML += `
+                    <div class="result animation">
+                        <p><strong>Q${i + 1}: ${question.text}</strong></p>
+                        <p class="${resultClass}">${isCorrect ? 'Correct' : 'Wrong'} Answer: ${question.options[selectedAnswer]}</p>
+                        ${!isCorrect ? `<p>Correct Answer: ${question.options[question.correct]}</p>` : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById('question-results').innerHTML = resultsHTML;
+            document.getElementById('solvedCount').textContent = solvedCount;
+            document.getElementById('unsolvedCount').textContent = totalQuestions - solvedCount;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('progress').style.display = 'none';
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('navigation-buttons').style.display = 'none';
+        }
+
+        // Timer functionality
+        let timeLeft = 1800; // 30 minutes in seconds
+        const timerElement = document.getElementById('timer');
+
+        const timer = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                alert("Time's up! Submitting the test automatically.");
+                submitTest();
+            }
+        }, 1000);
+
+        // Initialize the first question and generate index
+        displayQuestion(0);
+        updateProgress();
+        generateQuestionIndex();
+    </script>
+</body>
+</html>

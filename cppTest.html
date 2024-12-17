@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock C++ Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+            flex-direction: column;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 20px;
+        }
+        #progress {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        #question-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+        }
+        #question-index a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+        #question-index a:hover {
+            text-decoration: underline;
+        }
+        .question {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 10px;
+        }
+        .options {
+            margin: 15px 0;
+            text-align: left;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+        }
+        #timer {
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .result {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        #submit-test-button {
+            background-color: #d9534f;
+        }
+        #submit-test-button:hover {
+            background-color: #c9302c;
+        }
+        #results {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+        #results h3 {
+            margin-bottom: 15px;
+        }
+        .animation {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="progress">Solved: 0 | Unsolved: 3</div>
+        <div id="question-index">
+            <!-- Question index navigation -->
+        </div>
+        <h1>Mock C++ Test</h1>
+        <div id="timer">Time Remaining: 30:00</div>
+        <div id="question-container">
+            <!-- Question and Options will be dynamically inserted here -->
+        </div>
+        <div id="navigation-buttons">
+            <button id="previous-button" onclick="previousQuestion()">Previous</button>
+            <button id="next-button" onclick="nextQuestion()">Next</button>
+            <button id="submit-button" onclick="submitAnswer()">Submit Answer</button>
+            <button id="submit-test-button" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <div id="results">
+        <h3>Test Results</h3>
+        <p><strong>Total Questions:</strong> <span id="totalQuestions">20</span></p>
+        <p><strong>Solved:</strong> <span id="solvedCount">0</span></p>
+        <p><strong>Unsolved:</strong> <span id="unsolvedCount">0</span></p>
+        <div id="question-results">
+            <!-- Individual question results will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 'q1', text: 'What is the correct syntax to include a header file in C++?', options: ['#include <header>', 'include <header>', '#header <header>', 'include "header"'], correct: 0 },
+            { id: 'q2', text: 'What does the `virtual` keyword in C++ indicate?', options: ['To define a pure virtual function', 'To override the base class function', 'Both A and B', 'None of the above'], correct: 2 },
+            { id: 'q3', text: 'Which keyword is used to inherit a class in C++?', options: ['inherits', 'extends', 'public', 'super'], correct: 2 },
+
+              
+                {
+                    id: 'q3',
+                    text: 'Which data type is used to store floating-point numbers in C++?',
+                    options: ['int', 'float', 'char', 'bool'],
+                    correct: 1,
+                },
+                {
+                    id: 'q4',
+                    text: 'What does `std` represent in C++?',
+                    options: ['A namespace', 'A function', 'A header file', 'A library'],
+                    correct: 0,
+                },
+                {
+                    id: 'q5',
+                    text: 'What is the default value of a local variable in C++?',
+                    options: ['0', 'NULL', 'Garbage value', 'Undefined'],
+                    correct: 2,
+                },
+                {
+                    id: 'q6',
+                    text: 'Which operator cannot be overloaded in C++?',
+                    options: ['+', '->', 'sizeof', '=='],
+                    correct: 2,
+                },
+                {
+                    id: 'q7',
+                    text: 'What is the time complexity of searching an element in a binary search tree (BST)?',
+                    options: ['O(1)', 'O(n)', 'O(log n)', 'O(n^2)'],
+                    correct: 2,
+                },
+                {
+                    id: 'q8',
+                    text: 'Which of the following is not a valid access specifier in C++?',
+                    options: ['private', 'protected', 'public', 'internal'],
+                    correct: 3,
+                },
+                {
+                    id: 'q9',
+                    text: 'What is the correct way to define a destructor in a class?',
+                    options: ['~ClassName()', 'ClassName()', 'destructor()', '~ClassName'],
+                    correct: 0,
+                },
+                {
+                    id: 'q10',
+                    text: 'What is the role of `std::move` in C++?',
+                    options: ['To copy objects', 'To delete objects', 'To enable move semantics', 'To allocate memory'],
+                    correct: 2,
+                },
+                {
+                    id: 'q11',
+                    text: 'Which of the following defines encapsulation in C++?',
+                    options: [
+                        'Wrapping data and methods into a single unit',
+                        'Inheriting properties from a base class',
+                        'Hiding implementation details from the user',
+                        'Overloading operators',
+                    ],
+                    correct: 0,
+                },
+                {
+                    id: 'q12',
+                    text: 'What is the purpose of the `new` keyword in C++?',
+                    options: [
+                        'To allocate memory dynamically',
+                        'To define a new variable',
+                        'To deallocate memory',
+                        'None of the above',
+                    ],
+                    correct: 0,
+                },
+                {
+                    id: 'q13',
+                    text: 'What is the size of `int` in most modern C++ compilers?',
+                    options: ['1 byte', '2 bytes', '4 bytes', '8 bytes'],
+                    correct: 2,
+                },
+                {
+                    id: 'q14',
+                    text: 'Which of the following is used to create an abstract class in C++?',
+                    options: [
+                        'virtual keyword',
+                        'abstract keyword',
+                        'pure virtual function',
+                        'friend keyword',
+                    ],
+                    correct: 2,
+                },
+                {
+                    id: 'q15',
+                    text: 'Which of the following is not a valid container in the Standard Template Library (STL)?',
+                    options: ['vector', 'stack', 'queue', 'arraylist'],
+                    correct: 3,
+                },
+                {
+                    id: 'q16',
+                    text: 'What does `cout` stand for in C++?',
+                    options: ['Console output', 'Character output', 'Common output', 'None of the above'],
+                    correct: 0,
+                },
+                {
+                    id: 'q17',
+                    text: 'Which loop structure is used when the number of iterations is known beforehand?',
+                    options: ['for loop', 'while loop', 'do-while loop', 'None of the above'],
+                    correct: 0,
+                },
+                {
+                    id: 'q18',
+                    text: 'What is the output of `cout << 5 + 3 << endl;`?',
+                    options: ['5', '3', '8', 'Compilation error'],
+                    correct: 2,
+                },
+                {
+                    id: 'q19',
+                    text: 'Which of the following can be used to handle exceptions in C++?',
+                    options: ['try-catch', 'if-else', 'switch-case', 'None of the above'],
+                    correct: 0,
+                },
+                
+
+        ];
+
+        let currentQuestionIndex = 0;
+        const totalQuestions = questions.length;
+        const formData = {};
+        let solvedCount = 0;
+
+        function updateProgress() {
+            const unsolvedCount = totalQuestions - solvedCount;
+            document.getElementById('progress').textContent = `Solved: ${solvedCount} | Unsolved: ${unsolvedCount}`;
+        }
+
+        function displayQuestion(index) {
+            const container = document.getElementById('question-container');
+            container.innerHTML = ''; // Clear previous content
+
+            const question = questions[index];
+
+            // Create Question Element
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.textContent = `${index + 1}. ${question.text}`;
+            container.appendChild(questionElement);
+
+            // Create Options
+            const optionsDiv = document.createElement('div');
+            optionsDiv.classList.add('options');
+
+            question.options.forEach((option, i) => {
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = question.id;
+                input.value = i;
+
+                if (formData[question.id] === i) {
+                    input.checked = true; // Retain previous selection
+                }
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(option));
+                optionsDiv.appendChild(label);
+            });
+
+            container.appendChild(optionsDiv);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function submitAnswer() {
+            const question = questions[currentQuestionIndex];
+            const selectedOption = document.querySelector(`input[name="${question.id}"]:checked`);
+
+            if (selectedOption) {
+                const userAnswer = parseInt(selectedOption.value);
+                if (!(question.id in formData)) solvedCount++;
+                formData[question.id] = userAnswer;
+
+                updateProgress();
+                alert('Answer submitted for this question.');
+            } else {
+                alert('Please select an answer before submitting.');
+            }
+        }
+
+        function generateQuestionIndex() {
+            const indexContainer = document.getElementById('question-index');
+            questions.forEach((_, i) => {
+                const link = document.createElement('a');
+                link.textContent = i + 1;
+                link.href = '#';
+                link.onclick = () => {
+                    currentQuestionIndex = i;
+                    displayQuestion(i);
+                };
+                indexContainer.appendChild(link);
+            });
+        }
+
+        function submitTest() {
+            let resultsHTML = '';
+            questions.forEach((question, i) => {
+                const selectedAnswer = formData[question.id];
+                const isCorrect = selectedAnswer === question.correct;
+                const resultClass = isCorrect ? 'correct' : 'wrong';
+                resultsHTML += `
+                    <div class="result animation">
+                        <p><strong>Q${i + 1}: ${question.text}</strong></p>
+                        <p class="${resultClass}">${isCorrect ? 'Correct' : 'Wrong'} Answer: ${question.options[selectedAnswer]}</p>
+                        ${!isCorrect ? `<p>Correct Answer: ${question.options[question.correct]}</p>` : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById('question-results').innerHTML = resultsHTML;
+            document.getElementById('solvedCount').textContent = solvedCount;
+            document.getElementById('unsolvedCount').textContent = totalQuestions - solvedCount;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('progress').style.display = 'none';
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('navigation-buttons').style.display = 'none';
+        }
+
+        // Timer functionality
+        let timeLeft = 1800; // 30 minutes in seconds
+        const timerElement = document.getElementById('timer');
+
+        const timer = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                alert("Time's up! Submitting the test automatically.");
+                submitTest();
+            }
+        }, 1000);
+
+        // Initialize the first question and generate index
+        displayQuestion(0);
+        updateProgress();
+        generateQuestionIndex();
+    </script>
+</body>
+</html>

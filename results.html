@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+            flex-direction: column;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .result {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        #back-button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #back-button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Results</h1>
+        <p><strong>Total Questions:</strong> <span id="totalQuestions">25</span></p>
+        <p><strong>Solved:</strong> <span id="solvedCount">0</span></p>
+        <p><strong>Unsolved:</strong> <span id="unsolvedCount">0</span></p>
+
+        <div id="question-results">
+            <!-- Individual question results will be inserted here -->
+        </div>
+
+        <button id="back-button" onclick="window.location.href='index.html'">Back to Test</button>
+    </div>
+
+    <script>
+        // Retrieve the stored results from localStorage
+        const totalQuestions = localStorage.getItem('totalQuestions');
+        const solvedCount = localStorage.getItem('solvedCount');
+        const unsolvedCount = localStorage.getItem('unsolvedCount');
+        const questionResults = JSON.parse(localStorage.getItem('questionResults'));
+
+        // Display the results
+        document.getElementById('totalQuestions').textContent = totalQuestions;
+        document.getElementById('solvedCount').textContent = solvedCount;
+        document.getElementById('unsolvedCount').textContent = unsolvedCount;
+
+        // Display the result for each question
+        const questionResultsContainer = document.getElementById('question-results');
+        questionResults.forEach(result => {
+            const p = document.createElement('p');
+            p.textContent = result.text;
+            if (result.correct) {
+                p.classList.add('correct');
+                p.textContent += " (Correct)";
+            } else {
+                p.classList.add('wrong');
+                p.textContent += " (Wrong)";
+            }
+            questionResultsContainer.appendChild(p);
+        });
+    </script>
+</body>
+</html>

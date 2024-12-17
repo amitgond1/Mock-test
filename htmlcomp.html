@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML, CSS, JavaScript Compiler with Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+        header {
+            background-color: #1abc9c;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 2rem;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        @keyframes slideInFromTop {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px;
+        }
+
+        .editor, .output {
+            flex: 1;
+            min-width: 300px;
+            max-width: 48%;
+            margin: 10px 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-family: monospace;
+            font-size: 1rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .editor, .output {
+                max-width: 100%;
+            }
+        }
+
+        /* Additional Animation Examples */
+        .animation-example {
+            margin: 10px 0;
+            text-align: center;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            animation: fadeIn 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0.5; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <header>HTML, CSS, JavaScript Compiler </header>
+
+    <div class="container">
+        <!-- HTML Editor -->
+        <div class="editor">
+            <h3>HTML Code</h3>
+            <textarea id="htmlCode" placeholder="Write your HTML code here..."></textarea>
+        </div>
+
+        <!-- CSS Editor -->
+        <div class="editor">
+            <h3>CSS Code</h3>
+            <textarea id="cssCode" placeholder="Write your CSS code here..."></textarea>
+        </div>
+
+        <!-- JavaScript Editor -->
+        <div class="editor">
+            <h3>JavaScript Code</h3>
+            <textarea id="jsCode" placeholder="Write your JavaScript code here..."></textarea>
+        </div>
+
+        <!-- Output Viewer -->
+        <div class="output">
+            <h3>Output</h3>
+            <iframe id="outputFrame"></iframe>
+        </div>
+    </div>
+
+    <div class="container">
+        <button onclick="compileCode()">Run Code</button>
+        <button onclick="saveCode()">Save Code</button>
+    </div>
+
+    <script>
+        function compileCode() {
+            // Get code from editors
+            const htmlCode = document.getElementById("htmlCode").value;
+            const cssCode = document.getElementById("cssCode").value;
+            const jsCode = document.getElementById("jsCode").value;
+
+            // Combine HTML, CSS, and JavaScript
+            const code = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <style>${cssCode}</style>
+                </head>
+                <body>
+                    ${htmlCode}
+                    <script>${jsCode}<\/script>
+                </body>
+                </html>
+            `;
+
+            // Render the code in the iframe
+            const outputFrame = document.getElementById("outputFrame");
+            outputFrame.srcdoc = code;
+        }
+
+        function saveCode() {
+            // Get code from editors
+            const htmlCode = document.getElementById("htmlCode").value;
+            const cssCode = document.getElementById("cssCode").value;
+            const jsCode = document.getElementById("jsCode").value;
+
+            // Combine code into a single string
+            const code = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <title>Saved Code</title>
+                    <style>${cssCode}</style>
+                </head>
+                <body>
+                    ${htmlCode}
+                    <script>${jsCode}<\/script>
+                </body>
+                </html>
+            `;
+
+            // Create a downloadable file
+            const blob = new Blob([code], { type: "text/html" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "myCode.html";
+            a.click();
+        }
+    </script>
+</body>
+</html>

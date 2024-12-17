@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Mock Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #34495e;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 8px 0;
+        }
+        .submit-btn, .save-btn {
+            display: block;
+            width: 100%;
+            background-color: #1abc9c;
+            color: white;
+            font-size: 1rem;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover, .save-btn:hover {
+            background-color: #16a085;
+        }
+        .result, .summary {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            color: #34495e;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #34495e;
+            color: white;
+        }
+        .solution {
+            background-color: #f9f9f9;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .solution.correct {
+            color: green;
+        }
+        .solution.incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>C++ Mock Test</h1>
+        <h2>Test Your Skills!</h2>
+    </header>
+    <div class="container" id="test-container">
+        <!-- Questions -->
+        <div class="question" id="question-1">
+            <h3>1. What is the output of the following code?</h3>
+            <pre>int main() { std::cout << "Hello, World!"; return 0; }</pre>
+            <ul class="options">
+                <li><input type="radio" name="q1" value="a"> a) Hello World!</li>
+                <li><input type="radio" name="q1" value="b"> b) Error</li>
+                <li><input type="radio" name="q1" value="c"> c) Hello, World!</li>
+                <li><input type="radio" name="q1" value="d"> d) None of the above</li>
+            </ul>
+        </div>
+
+        <div class="question" id="question-2">
+            <h3>2. What is the size of an int in C++?</h3>
+            <ul class="options">
+                <li><input type="radio" name="q2" value="a"> a) 2 bytes</li>
+                <li><input type="radio" name="q2" value="b"> b) 4 bytes</li>
+                <li><input type="radio" name="q2" value="c"> c) Depends on the system</li>
+                <li><input type="radio" name="q2" value="d"> d) None of the above</li>
+            </ul>
+        </div>
+
+        <!-- Buttons -->
+        <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+    </div>
+
+    <!-- Result -->
+    <div class="result" id="result"></div>
+    <div class="summary" id="summary"></div>
+
+    <footer>
+        <p>&copy; 2024 C++ Mock Test by Amit</p>
+    </footer>
+
+    <script>
+        const correctAnswers = {
+            q1: { answer: "c", solution: "Correct Output: Hello, World!" },
+            q2: { answer: "c", solution: "Size of int depends on the system architecture." },
+            // Add the correct answers and solutions for other questions here
+        };
+
+        function submitTest() {
+            let score = 0;
+            let totalQuestions = Object.keys(correctAnswers).length;
+            let solvedQuestions = 0;
+            let unsolvedQuestions = 0;
+
+            let resultHTML = "";
+            for (let question in correctAnswers) {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedOption) {
+                    solvedQuestions++;
+                    if (selectedOption.value === correctAnswers[question].answer) {
+                        score += 4; // Each correct answer gives 4 marks
+                        resultHTML += `<div class="solution correct">Q: ${question} - Correct!</div>`;
+                    } else {
+                        resultHTML += `<div class="solution incorrect">
+                            Q: ${question} - Incorrect. Correct Answer: ${correctAnswers[question].solution}
+                        </div>`;
+                    }
+                } else {
+                    unsolvedQuestions++;
+                    resultHTML += `<div class="solution incorrect">Q: ${question} - Unsolved. Correct Answer: ${correctAnswers[question].solution}</div>`;
+                }
+            }
+
+            // Display results
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `<strong>You scored ${score} out of ${totalQuestions * 4} marks!</strong>`;
+            
+            // Display summary
+            const summaryDiv = document.getElementById("summary");
+            summaryDiv.innerHTML = `
+                <p>Total Questions: ${totalQuestions}</p>
+                <p>Solved Questions: ${solvedQuestions}</p>
+                <p>Unsolved Questions: ${unsolvedQuestions}</p>
+                <p>Correct Answers: ${score / 4}</p>
+                <p>Incorrect Answers: ${solvedQuestions - (score / 4)}</p>
+            `;
+
+            // Append detailed solutions
+            resultDiv.innerHTML += resultHTML;
+        }
+    </script>
+</body>
+</html>

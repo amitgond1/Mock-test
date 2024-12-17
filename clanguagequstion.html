@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Language Mock Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f3;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #3498db;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .question h3 {
+            margin-bottom: 10px;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #16a085;
+        }
+
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            display: none;
+        }
+
+        #results h3 {
+            color: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        C Language Mock Test - Basic
+    </header>
+    <div class="container">
+        <form id="mockTestForm">
+            <!-- Questions -->
+            <div class="question" id="q1">
+                <h3>1. Which keyword is used to declare a variable in C?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="int"> int</label>
+                    <label><input type="radio" name="q1" value="var"> var</label>
+                    <label><input type="radio" name="q1" value="dim"> dim</label>
+                    <label><input type="radio" name="q1" value="let"> let</label>
+                </div>
+            </div>
+            
+            <!-- Add 14 more questions here -->
+            <!-- Example for another question -->
+            <div class="question" id="q2">
+                <h3>2. What is the output of printf("%d", 10 > 5);?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="0"> 0</label>
+                    <label><input type="radio" name="q2" value="1"> 1</label>
+                    <label><input type="radio" name="q2" value="10"> 10</label>
+                    <label><input type="radio" name="q2" value="Error"> Error</label>
+                </div>
+            </div>
+            <!-- Repeat for other questions -->
+
+            <!-- Submit Button -->
+            <button type="button" class="submit-btn" onclick="submitTest()">Submit Test</button>
+        </form>
+
+        <!-- Results -->
+        <div id="results">
+            <h3>Test Results</h3>
+            <p><strong>Total Questions:</strong> 15</p>
+            <p><strong>Correct Answers:</strong> <span id="correctCount">0</span></p>
+            <p><strong>Wrong Answers:</strong> <span id="wrongCount">0</span></p>
+            <p><strong>Attempted Questions:</strong> <span id="attemptedCount">0</span></p>
+            <p><strong>Unattempted Questions:</strong> <span id="unattemptedCount">0</span></p>
+            <p><strong>Correct Solutions:</strong></p>
+            <ul id="correctSolutions"></ul>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: "int",
+            q2: "1"
+            // Add the rest of the answers for all 15 questions
+        };
+
+        function submitTest() {
+            const form = document.getElementById("mockTestForm");
+            const formData = new FormData(form);
+            let correctCount = 0, wrongCount = 0, attemptedCount = 0;
+
+            const correctSolutionsList = document.getElementById("correctSolutions");
+            correctSolutionsList.innerHTML = ""; // Clear previous solutions
+
+            Object.keys(correctAnswers).forEach(question => {
+                const userAnswer = formData.get(question);
+                if (userAnswer) {
+                    attemptedCount++;
+                    if (userAnswer === correctAnswers[question]) {
+                        correctCount++;
+                    } else {
+                        wrongCount++;
+                        const correctAnswer = correctAnswers[question];
+                        correctSolutionsList.innerHTML += `<li><strong>${question}:</strong> Correct Answer is ${correctAnswer}</li>`;
+                    }
+                }
+            });
+
+            const unattemptedCount = Object.keys(correctAnswers).length - attemptedCount;
+
+            // Update result section
+            document.getElementById("correctCount").textContent = correctCount;
+            document.getElementById("wrongCount").textContent = wrongCount;
+            document.getElementById("attemptedCount").textContent = attemptedCount;
+            document.getElementById("unattemptedCount").textContent = unattemptedCount;
+
+            document.getElementById("results").style.display = "block";
+        }
+    </script>
+</body>
+</html>

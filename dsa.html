@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock DSA Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+            flex-direction: column;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 20px;
+        }
+        #progress {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        #question-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+        }
+        #question-index a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+        #question-index a:hover {
+            text-decoration: underline;
+        }
+        .question {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 10px;
+        }
+        .options {
+            margin: 15px 0;
+            text-align: left;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+        }
+        #timer {
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .result {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        #submit-test-button {
+            background-color: #d9534f;
+        }
+        #submit-test-button:hover {
+            background-color: #c9302c;
+        }
+        #results {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+        }
+        #results h3 {
+            margin-bottom: 15px;
+        }
+        .animation {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive design for different screen sizes */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .question {
+                font-size: 1.2rem;
+            }
+            .options label {
+                font-size: 0.9rem;
+            }
+            button {
+                padding: 8px 15px;
+            }
+            #progress {
+                font-size: 0.9rem;
+                position: static;
+                margin-bottom: 10px;
+            }
+            #question-index {
+                font-size: 0.9rem;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            .question {
+                font-size: 1rem;
+            }
+            .options label {
+                font-size: 0.8rem;
+            }
+            button {
+                padding: 6px 12px;
+            }
+            #timer {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="progress">Solved: 0 | Unsolved: 3</div>
+        <div id="question-index">
+            <!-- Question index navigation -->
+        </div>
+        <h1>Mock DSA Test</h1>
+        <div id="timer">Time Remaining: 40:00</div>
+        <div id="question-container">
+            <!-- Question and Options will be dynamically inserted here -->
+        </div>
+        <div id="navigation-buttons">
+            <button id="previous-button" onclick="previousQuestion()">Previous</button>
+            <button id="next-button" onclick="nextQuestion()">Next</button>
+            <button id="submit-button" onclick="submitAnswer()">Submit Answer</button>
+            <button id="submit-test-button" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <div id="results">
+        <h3>Test Results</h3>
+        <p><strong>Total Questions:</strong> <span id="totalQuestions">25</span></p>
+        <p><strong>Solved:</strong> <span id="solvedCount">0</span></p>
+        <p><strong>Unsolved:</strong> <span id="unsolvedCount">0</span></p>
+        <div id="question-results">
+            <!-- Individual question results will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+
+        const questions = [
+            { id: 'q1', text: 'What is the time complexity to access an element in an array?', options: ['O(n)', 'O(1)', 'O(log n)', 'O(n^2)'], correct: 1 },
+            { id: 'q2', text: 'Which data structure uses the LIFO principle?', options: ['Queue', 'Stack', 'Array', 'Linked List'], correct: 1 },
+            { id: 'q3', text: 'What is the best case time complexity of the Bubble Sort algorithm?', options: ['O(n)', 'O(n^2)', 'O(log n)', 'O(n log n)'], correct: 0 },
+            { id: 'q4', text: 'Which of the following is not a linear data structure?', options: ['Array', 'Stack', 'Queue', 'Tree'], correct: 3 },
+            { id: 'q5', text: 'What does the following snippet do? `arr[i] = arr[i] + arr[j]; arr[j] = arr[i] - arr[j]; arr[i] = arr[i] - arr[j];`', options: ['Swap arr[i] and arr[j]', 'Sum two numbers', 'Reverse the array', 'Sort the array'], correct: 0 },
+            { id: 'q6', text: 'Which traversal technique follows the order: root, left, right?', options: ['Inorder', 'Preorder', 'Postorder', 'Level Order'], correct: 1 },
+            { id: 'q7', text: 'Which of the following sorting algorithms is NOT stable?', options: ['Merge Sort', 'Quick Sort', 'Bubble Sort', 'Insertion Sort'], correct: 1 },
+            { id: 'q8', text: 'What is the time complexity of searching in a Binary Search Tree (BST) in the worst case?', options: ['O(log n)', 'O(n)', 'O(1)', 'O(n^2)'], correct: 1 },
+            { id: 'q9', text: 'Which of the following data structures is most suitable for implementing a priority queue?', options: ['Array', 'Linked List', 'Heap', 'Stack'], correct: 2 },
+            { id: 'q10', text: 'What is the time complexity of inserting an element into a hash table (assuming no collisions)?', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], correct: 0 },
+            { id: 'q11', text: 'Which algorithm uses the divide-and-conquer technique?', options: ['Bubble Sort', 'Merge Sort', 'Selection Sort', 'Insertion Sort'], correct: 1 },
+            { id: 'q12', text: 'What does a topological sort represent in a graph?', options: ['Shortest path', 'Cyclic ordering', 'Linear ordering', 'All nodes at the same level'], correct: 2 },
+            { id: 'q13', text: 'Which operation takes O(n) time in a singly linked list?', options: ['Insert at head', 'Insert at tail', 'Access a node by value', 'Delete from head'], correct: 2 },
+            { id: 'q14', text: 'What is the height of a complete binary tree with n nodes?', options: ['O(n)', 'O(log n)', 'O(n^2)', 'O(n log n)'], correct: 1 },
+            { id: 'q15', text: 'Which algorithm is used to find the shortest path in a weighted graph?', options: ['BFS', 'DFS', 'Dijkstra\'s Algorithm', 'Prim\'s Algorithm'], correct: 2 },
+            { id: 'q16', text: 'What is the time complexity of the Floyd-Warshall algorithm?', options: ['O(V)', 'O(V^2)', 'O(V^3)', 'O(E log V)'], correct: 2 },
+            { id: 'q17', text: 'What is the purpose of the KMP algorithm in strings?', options: ['Sort strings', 'Search for a pattern', 'Find the longest substring', 'Reverse strings'], correct: 1 },
+            { id: 'q18', text: 'In a Trie, what is the maximum number of children a node can have?', options: ['26', 'Depends on the character set', 'O(n)', '128'], correct: 1 }
+        ];
+
+        let currentQuestionIndex = 0;
+        const totalQuestions = questions.length;
+        const formData = {};
+        let solvedCount = 0;
+
+        function updateProgress() {
+            const unsolvedCount = totalQuestions - solvedCount;
+            document.getElementById('progress').textContent = `Solved: ${solvedCount} | Unsolved: ${unsolvedCount}`;
+        }
+
+        function displayQuestion(index) {
+            const container = document.getElementById('question-container');
+            container.innerHTML = ''; // Clear previous content
+
+            const question = questions[index];
+
+            // Create Question Element
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.textContent = `${index + 1}. ${question.text}`;
+            container.appendChild(questionElement);
+
+            // Create Options
+            const optionsDiv = document.createElement('div');
+            optionsDiv.classList.add('options');
+
+            question.options.forEach((option, i) => {
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `question-${question.id}`;
+                input.value = i;
+                input.onclick = () => {
+                    formData[question.id] = i;
+                    if (!question.selected) {
+                        question.selected = true;
+                        solvedCount++;
+                    }
+                    updateProgress();
+                };
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(option));
+                optionsDiv.appendChild(label);
+            });
+
+            container.appendChild(optionsDiv);
+
+            // Update question index navigation
+            const indexContainer = document.getElementById('question-index');
+            indexContainer.innerHTML = '';
+            questions.forEach((question, i) => {
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = i + 1;
+                link.onclick = () => displayQuestion(i);
+                indexContainer.appendChild(link);
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function submitAnswer() {
+            const question = questions[currentQuestionIndex];
+            const selectedAnswer = formData[question.id];
+            if (selectedAnswer === question.correct) {
+                solvedCount++;
+            }
+            updateProgress();
+        }
+
+
+
+       function submitTest() {
+    let correctCount = 0;
+    questions.forEach((question) => {
+        if (formData[question.id] === question.correct) {
+            correctCount++;
+        }
+    });
+
+    // Store results in localStorage
+    localStorage.setItem('totalQuestions', totalQuestions);
+    localStorage.setItem('solvedCount', correctCount);
+    localStorage.setItem('unsolvedCount', totalQuestions - correctCount);
+
+    const questionResults = questions.map((question) => ({
+        text: question.text,
+        correct: formData[question.id] === question.correct
+    }));
+    localStorage.setItem('questionResults', JSON.stringify(questionResults));
+
+    // Redirect to results page
+    window.location.href = 'results.html';
+}
+
+        
+          // Timer functionality
+        let timeLeft = 2400; // 30 minutes in seconds
+        const timerElement = document.getElementById('timer');
+
+        const timer = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                alert("Time's up! Submitting the test automatically.");
+                submitTest();
+            }
+        }, 1000);
+
+
+        // Initial question display
+        displayQuestion(currentQuestionIndex);
+    </script>
+</body>
+</html>
