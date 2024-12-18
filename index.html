@@ -99,19 +99,33 @@
             margin-top: 20px;
         }
         @media (max-width: 768px) {
+            header {
+                display: none; /* Hide header on mobile */
+            }
             nav {
+                display: none; /* Hide the navigation bar on mobile */
                 flex-direction: column;
-                padding: 10px 0;
+                width: 100%;
             }
             nav a {
                 font-size: 1rem;
                 margin: 10px 0;
+                text-align: center;
             }
-            .section h2 {
-                font-size: 1.5rem;
+            .hamburger {
+                display: block;
+                background-color: #34495e;
+                color: white;
+                font-size: 30px;
+                padding: 10px;
+                cursor: pointer;
+                position: absolute;
+                top: 20px;
+                right: 20px;
             }
-            .section p {
-                font-size: 1rem;
+            .nav-active {
+                display: flex;
+                flex-direction: column;
             }
         }
         /* Smooth Scroll */
@@ -124,16 +138,21 @@
     <header>
         <h1>Link and Notes Saver</h1>
     </header>
-    <nav>
+    <!-- Hamburger Menu Icon -->
+    <div class="hamburger" onclick="toggleNav()">☰</div>
+
+    <nav id="nav-bar">
         <a href="#about">About</a>
         <a href="booksection.html">Book</a>
         <a href="notes2.html">Notes</a>
         <a href="link.html">Link</a>
         <a href="#leetcode">LeetCode</a>
-        <a href="coding.html">Coding-Motivation </a>
-        <a href="selector.html"> mOcK-tEsT</a>
+        <a href="coding.html">Coding-Motivation</a>
+        <a href="selector.html">mOcK-tEsT</a>
+        <a href="advsorting.html">sorting-algo</a>
         <a href="htmlcomp.html">Html-Compiler</a>
     </nav>
+
     <div class="container">
         <!-- About Section -->
         <div class="section" id="about">
@@ -165,8 +184,16 @@
             </a>
         </div>
     </div>
+
     <footer>
         <p>&copy; 2024 Developed by Amit</p>
     </footer>
+
+    <script>
+        function toggleNav() {
+            const nav = document.getElementById('nav-bar');
+            nav.classList.toggle('nav-active');
+        }
+    </script>
 </body>
 </html>
