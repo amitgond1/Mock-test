@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithm Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #bbd2d0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 36px; /* Increased font size */
+            color: #2c3e50; /* Dark blue color for the title */
+        }
+        .array-bar {
+            display: inline-block;
+            width: 20px;
+            margin: 1px;
+            background-color: #3498db;
+            vertical-align: bottom;
+        }
+        #controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 18px; /* Increased font size */
+            cursor: pointer;
+            margin: 5px;
+            border: none;
+            background-color: #2ecc71;
+            color: white;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        .code-section {
+            margin-top: 40px;
+            text-align: left;
+            padding: 20px; /* Increased padding */
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            width: 80%;
+            margin: 20px auto;
+            font-family: Courier, monospace;
+            font-size: 18px; /* Increased font size */
+            color: #34495e; /* Dark gray color for text */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow effect */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .array-bar {
+                width: 15px;
+            }
+            button {
+                font-size: 16px;
+                padding: 10px;
+                margin: 5px 2px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .array-bar {
+                width: 10px;
+            }
+            button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Sorting Algorithm Visualization</h1>
+    <div id="array-container"></div>
+    <div id="controls">
+        <button onclick="startSorting('bubble')">Bubble Sort</button>
+        <button onclick="startSorting('selection')">Selection Sort</button>
+        <button onclick="startSorting('insertion')">Insertion Sort</button>
+        <button onclick="startSorting('shell')">Shell Sort</button>
+        <button onclick="startSorting('quick')">Quick Sort</button>
+        <button onclick="startSorting('heap')">Heap Sort</button>
+    </div>
+
+    <div id="cpp-code">
+        <!-- Bubble Sort C++ Code -->
+        <div class="code-section" id="cpp-bubble">
+            <h3>Bubble Sort (C++)</h3>
+            
+        
+            <pre id="code-bubble">
+#include &lt;iostream&gt;
+using namespace std;
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i &lt; n - 1; i++) {
+        for (int j = 0; j &lt; n - 1 - i; j++) {
+            if (arr[j] &gt; arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    bubbleSort(arr, n);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+            </pre>
+        </div>
+
+
+        <!-- Selection Sort C++ Code -->
+        <div class="code-section" id="cpp-selection" style="display:none;">
+            <h3>Selection Sort (C++)</h3>
+            <pre id="code-selection">
+#include &lt;iostream&gt;
+using namespace std;
+
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i &lt; n - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        swap(arr[i], arr[minIndex]);
+    }
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    selectionSort(arr, n);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+            </pre>
+        </div>
+
+        <!-- Insertion Sort C++ Code -->
+        <div class="code-section" id="cpp-insertion" style="display:none;">
+            <h3>Insertion Sort (C++)</h3>
+            <pre id="code-insertion">
+#include &lt;iostream&gt;
+using namespace std;
+
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i &lt; n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j &gt;= 0 && arr[j] &gt; key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    insertionSort(arr, n);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+            </pre>
+        </div>
+
+        <!-- Shell Sort C++ Code -->
+        <div class="code-section" id="cpp-shell" style="display:none;">
+            <h3>Shell Sort (C++)</h3>
+            <pre id="code-shell">
+#include &lt;iostream&gt;
+using namespace std;
+
+void shellSort(int arr[], int n) {
+    for (int gap = n / 2; gap &gt; 0; gap /= 2) {
+        for (int i = gap; i &lt; n; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j &gt;= gap && arr[j - gap] &gt; temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    shellSort(arr, n);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+            </pre>
+        </div>
+
+
+        <!-- Heap Sort C++ Code -->
+<div class="code-section" id="cpp-heap" style="display:none;">
+    <h3>Heap Sort (C++)</h3>
+    <pre id="code-heap">
+#include &lt;iostream&gt;
+using namespace std;
+
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left &lt; n && arr[left] &gt; arr[largest])
+        largest = left;
+
+    if (right &lt; n && arr[right] &gt; arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(int arr[], int n) {
+    for (int i = n / 2 - 1; i &gt;= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i &gt; 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6, 7};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    heapSort(arr, n);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+    </pre>
+</div>
+
+
+<!-- Shell Sort C++ Code -->
+<div class="code-section" id="cpp-shell" style="display:none;">
+    <h3>Shell Sort (C++)</h3>
+    <pre id="code-shell">
+#include &lt;iostream&gt;
+using namespace std;
+
+void shellSort(int arr[], int n) {
+    for (int gap = n / 2; gap &gt; 0; gap /= 2) {
+        for (int i = gap; i &lt; n; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j &gt;= gap && arr[j - gap] &gt; temp) {
+                arr[j] = arr[j - gap];
+                j -= gap;
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+int main() {
+    int arr[] = {5, 2, 9, 1, 5, 6};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    shellSort(arr, n);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+    </pre>
+</div>
+
+
+<!-- Quick Sort C++ Code -->
+<div class="code-section" id="cpp-quick" style="display:none;">
+    <h3>Quick Sort (C++)</h3>
+    <pre id="code-quick">
+#include &lt;iostream&gt;
+using namespace std;
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j &lt; high; j++) {
+        if (arr[j] &lt;= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low &lt; high) {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quickSort(arr, 0, n - 1);
+    for (int i = 0; i &lt; n; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+    return 0;
+}
+    </pre>
+</div>
+
+
+
+
+
+
+    </div>
+
+
+    <script>
+        const arraySize = 50;
+        let array = generateRandomArray(arraySize);
+
+        function generateRandomArray(size) {
+            let arr = [];
+            for (let i = 0; i < size; i++) {
+                arr.push(Math.floor(Math.random() * 500) + 5);
+            }
+            return arr;
+        }
+
+        function visualizeArray(arr) {
+            const container = document.getElementById("array-container");
+            container.innerHTML = '';
+            arr.forEach(height => {
+                const bar = document.createElement("div");
+                bar.classList.add("array-bar");
+                bar.style.height = height + "px";
+                container.appendChild(bar);
+            });
+        }
+
+        async function bubbleSort() {
+            let arr = [...array];
+            for (let i = 0; i < arr.length - 1; i++) {
+                for (let j = 0; j < arr.length - 1 - i; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                    }
+                    visualizeArray(arr);
+                    await sleep(10);
+                }
+            }
+        }
+
+        async function selectionSort() {
+            let arr = [...array];
+            for (let i = 0; i < arr.length - 1; i++) {
+                let minIndex = i;
+                for (let j = i + 1; j < arr.length; j++) {
+                    if (arr[j] < arr[minIndex]) {
+                        minIndex = j;
+                    }
+                }
+                [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+                visualizeArray(arr);
+                await sleep(10);
+            }
+        }
+
+        async function insertionSort() {
+            let arr = [...array];
+            for (let i = 1; i < arr.length; i++) {
+                let key = arr[i];
+                let j = i - 1;
+                while (j >= 0 && arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    j = j - 1;
+                }
+                arr[j + 1] = key;
+                visualizeArray(arr);
+                await sleep(10);
+            }
+        }
+
+        // Function to switch code sections
+        function showCode(algorithm) {
+            const codeSections = document.querySelectorAll('.code-section');
+            codeSections.forEach(section => section.style.display = 'none'); // Hide all code sections
+            const codeToShow = document.getElementById(`cpp-${algorithm}`);
+            if (codeToShow) {
+                codeToShow.style.display = 'block';
+            }
+        }
+
+        async function startSorting(algorithm) {
+            array = generateRandomArray(arraySize);
+            visualizeArray(array);
+            showCode(algorithm);
+            if (algorithm === "bubble") {
+                bubbleSort();
+            } else if (algorithm === "selection") {
+                selectionSort();
+            } else if (algorithm === "insertion") {
+                insertionSort();
+            } else if (algorithm === "shell") {
+                shellSort();
+            } else if (algorithm === "quick") {
+                quickSort();
+            } else if (algorithm === "heap") {
+                heapSort();
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        visualizeArray(array);
+    </script>
+</body>
+</html>
